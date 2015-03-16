@@ -36,3 +36,25 @@ dbms_output.put_line('la requete a ramené plus de lignes ');
 when others then 
 dbms_output.put_line('Erreur  '||SQLERRM);
 end;
+--creation d'une procedure stoquée
+create or replace procedure emp_par_id(v_id_emp number )
+is
+v_emp employees%rowtype;
+
+begin
+select *  into v_emp from employees where employee_id= v_id_emp ;
+dbms_output.put_line('l employé  '||v_emp.first_name||' '|| v_emp.last_name ||' touche '||v_emp.salary||' $');
+exception
+ when no_data_found then
+ dbms_output.put_line('aucune personne ne corresponds à ce numéro '||v_id_emp);
+ when too_many_rows then 
+dbms_output.put_line('la requete a ramené plus de lignes ');
+when others then 
+dbms_output.put_line('Erreur  '||SQLERRM);
+end;
+--pour tester cette procedure 
+set serveroutput on
+begin
+emp_par_id(&Entrer_un_nombre_d_employe);
+
+end;
