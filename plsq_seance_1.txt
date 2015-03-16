@@ -1,0 +1,38 @@
+-- afficher le nom et le salaire d'un employee avec un id donné
+-- afficher le nom et le salaire d'un employee avec un id donné
+set serveroutput on; --active l'affichage des messages dans oracle
+declare 
+v_nom varchar2(20);
+v_prenom varchar2(30);
+v_salaire number;
+v_id_emp   number not null :=100;
+begin
+select first_name , salary , last_name into v_nom,v_salaire ,v_prenom from employees 
+where employee_id= v_id_emp ;
+dbms_output.put_line('l employé  '||v_nom||' '|| v_prenom ||' touche '||v_salaire||' $');
+exception
+ when no_data_found then
+ dbms_output.put_line('aucune personne ne corresponds à ce numéro '||v_id_emp);
+ when too_many_rows then 
+dbms_output.put_line('la requete a ramené plus de lignes ');
+when others then 
+dbms_output.put_line('Erreur  '||SQLERRM);
+end;
+
+--2ème méthode : 
+-- afficher le nom et le salaire d'un employee avec un id donné
+set serveroutput on; --active l'affichage des messages dans oracle
+declare 
+v_emp employees%rowtype;
+v_id_emp   employees.employee_id%type not null :=100;
+begin
+select *  into v_emp from employees where employee_id= v_id_emp ;
+dbms_output.put_line('l employé  '||v_emp.first_name||' '|| v_emp.last_name ||' touche '||v_emp.salary||' $');
+exception
+ when no_data_found then
+ dbms_output.put_line('aucune personne ne corresponds à ce numéro '||v_id_emp);
+ when too_many_rows then 
+dbms_output.put_line('la requete a ramené plus de lignes ');
+when others then 
+dbms_output.put_line('Erreur  '||SQLERRM);
+end;
