@@ -58,3 +58,4 @@ begin
 emp_par_id(&Entrer_un_nombre_d_employe);
 
 end;
+-- fin du cours des procedures stoquées
