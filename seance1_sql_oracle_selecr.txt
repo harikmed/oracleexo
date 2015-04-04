@@ -1,0 +1,35 @@
+--listes  de toutes les info de  tous les employés 
+--select * from employees
+-- les ordonnées par ordre croissant (asc) du salaire  ,et  decroissant du first_name (desc z à a)
+--select * from employees order by salary asc , first_name desc
+--nom , prenom (nom complet), salaire des employees ayant un salaire > 4000
+--select first_name ||'-'||last_name as "Nom complet " , salary as "salaire"
+--from employees 
+--where salary > 4000
+--order by salary desc
+--rq: nom complet est un alias 
+-- listes des programmeurs ayant unn salaire > 3000
+--select * from employees 
+--where job_id ='IT_PROG' and salary > 3000 
+--order by first_name asc
+-- n'ayant pas de commission
+--select * from employees where commission_pct is  null
+
+--nom complet , le salaire sans commission ,et le salaire avec commission  des employes 
+--select first_name ||'  '||last_name as "nom complet", salary as "salaire",
+--salary+salary* nvl(commission_pct,0) as "salaire total"
+--from employees
+--nom complet ,et le salaire total  des employes 
+--select first_name , nvl2(commission_pct,salary+salary*commission_pct,salary) as "salaire total" from employees
+-- cad si commission_pct est not null (vrai) on calcul, sinon on affiche le salaire
+--select * from em
+--rq , creation d'un autre sysnonym pour employees :  create synonym em for employees
+--ceux  ayant un salaire > à celui de david austin
+--select * from employees where salary 
+--> 
+--(select salary from employees where first_name='David' and last_name='Austin')
+--order by salary asc
+-- qui est le mieux payé?
+--select * from employees where salary >= all (select salary from employees)
+-- ceux qui n'on le salaire minimal (cad ceux ayant un salaire > à n'importe qel salaire )
+select * from employees where salary > any (select salary from employees)

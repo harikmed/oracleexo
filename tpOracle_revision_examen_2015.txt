@@ -1,0 +1,86 @@
+CREATE TABLE HR.ECOLES 
+    ( 
+     IDEC NUMBER  NOT NULL , 
+     NOM VARCHAR2 (20 )  NOT NULL , 
+     ADRESSE VARCHAR2 (200 ) , 
+     NOMBREETUDIANT NUMBER , 
+     NIVEAU CHAR (10 ) 
+    ) 
+create table etudiants (
+idet integer , 
+nom varchar2(20),
+classe varchar2(20),
+idec integer , 
+constraint pk_et primary key(idet),
+constraint fk_ecole_etudiant foreign key(idec) references ecoles(idec) on delete cascade
+
+
+)
+
+Q2
+create or replace procedure p1(nom_ecole varchar2)
+is
+cursor st is select e.* from etudiants e , ecoles ec
+where e.idec=ec.idec
+and ec.nom like nom_ecole;
+begin
+for ligne in st 
+loop
+dbms_output.put_line('nom : '||ligne.nom||', classe '||ligne.classe);
+end loop;
+
+exception 
+
+when no_data_found then 
+
+dbms_output.put_line('Erreur , aucun étudiant trouvé pour cet ecole   '||sqlerrm);
+
+end;
+
+#pour le test
+
+begin 
+p1('nomecole');
+
+end ;
+Q3-
+
+
+create or replace function  f1(num_etudiant number) return varchar2
+is
+ligne ecoles%rowtype;
+begin
+select ec.* into ligne  from etudiants e , ecoles ec
+where e.idec=ec.idec and e.idet=num_etudiant;
+return ligne.nom;
+exception 
+
+when no_data_found then 
+
+dbms_output.put_line('Erreur , aucun étudiant trouvé pour cet ecole   '||sqlerrm);
+
+end;
+
+#pour tester la fct
+declare 
+v_nom ecoles.nom%type,
+begin
+v_nom:=f1(1);
+dbms_output.put_line('le nom de l''ecole est '||v_nom);
+end ;
+
+Q4-
+create or replace trigger t1 before insert on ecoles 
+for each row
+
+begin
+:new.nombreetudiant :=0;
+
+end;
+
+Q5-
+create or replace trigger t2 after insert on etudiants
+for each row
+begin
+update  ecoles set nombreetudiant =nombreetudiant+1 where idec= :new.idec;
+end;
